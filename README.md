@@ -35,6 +35,7 @@ To run the Personal Reviews application on your local machine, follow these step
 Create a new PostgreSQL database named PersonalReviews.
 Run the following SQL script to create the required table:
 
+sql
 CREATE TABLE "Reviews" (
     "ReviewID" SERIAL PRIMARY KEY,
     "Title" VARCHAR NOT NULL,
