@@ -1,0 +1,92 @@
+﻿@page
+@model PersonalReviews.Pages.Reviews.IndexModel
+@{
+    ViewData["Title"] = "View Reviews";
+}
+
+<h1 class="text-center">View Reviews</h1>
+
+<form method="get" class="row mb-3">
+    <div class="col-md-4">
+        <select asp-for="CategoryFilter" asp-items="Model.CategoryOptions" class="form-select">
+            <option value="">All Categories</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select asp-for="RatingFilter" class="form-select">
+            <option value="">All Ratings</option>
+            <option value="1">1 Star</option>
+            <option value="2">2 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="5">5 Stars</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select asp-for="SortOrder" onchange="this.form.submit()" class="form-select">
+            <option value="date_desc">Date (Newest First)</option>
+            <option value="date_asc">Date (Oldest First)</option>
+            <option value="title_asc">Title (A-Z)</option>
+            <option value="title_desc">Title (Z-A)</option>
+            <option value="rating_asc">Rating (Lowest First)</option>
+            <option value="rating_desc">Rating (Highest First)</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Apply</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Rating</th>
+            <th>Date Reviewed</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var review in Model.Reviews)
+        {
+            <tr>
+                <td>@review.Title</td>
+                <td>@review.Category</td>
+                <td>@review.Rating</td>
+                <td>@review.DateReviewed.ToShortDateString()</td>
+                <td>
+                    <a class="btn btn-warning btn-sm" asp-page="./Edit" asp-route-id="@review.ReviewID">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-page="./Delete" asp-route-id="@review.ReviewID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="./Index" asp-route-pageIndex="@(Model.PageIndex - 1)">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                    <a class="page-link" asp-page="./Index" asp-route-pageIndex="i">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="./Index" asp-route-pageIndex="@(Model.PageIndex + 1)">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
